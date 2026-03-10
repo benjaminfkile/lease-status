@@ -1,46 +1,94 @@
-# Getting Started with Create React App
+# Lease Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A mobile-friendly app to track your car lease mileage and see if you're over or under your allowed miles.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Mileage Tracking**: Log odometer readings with dates
+- **Budget Status**: See how many miles over/under you are
+- **Projections**: View projected end-of-lease mileage based on your current driving pace
+- **Progress Visualization**: Visual progress bar showing lease timeline
+- **Persistent Storage**: Last 100 entries saved to local storage
+- **Mobile-Friendly**: Responsive design with Material-UI
 
-### `npm start`
+## Configuration
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Configure your lease terms in the `.env` file:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```env
+# The date your lease started (YYYY-MM-DD format)
+REACT_APP_LEASE_START_DATE=2024-01-15
 
-### `npm test`
+# The date your lease ends (YYYY-MM-DD format)
+REACT_APP_LEASE_END_DATE=2027-01-15
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Total miles allowed for the entire lease period
+REACT_APP_LEASE_TOTAL_MILES=36000
 
-### `npm run build`
+# Odometer reading when the lease started (default: 0)
+REACT_APP_LEASE_START_MILEAGE=0
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Copy `.env.example` to `.env` and update with your lease details
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm start
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Formulas
 
-### `npm run eject`
+### Miles Driven
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+milesDriven = currentOdometer - startMileage
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Daily Allowance
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+totalLeaseDays = endDate - startDate (in days)
+dailyAllowance = totalMilesAllowed / totalLeaseDays
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Miles Allowed to Date
 
-## Learn More
+```
+daysElapsed = today - startDate (in days)
+milesAllowedToDate = dailyAllowance × daysElapsed
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Over/Under Budget
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+milesOverUnder = milesDriven - milesAllowedToDate
+```
+
+- **Positive** = over budget (driving too much)
+- **Negative** = under budget (on track)
+
+### Projected End Mileage
+
+```
+avgMilesPerDay = milesDriven / daysElapsed
+projectedEndMileage = avgMilesPerDay × totalLeaseDays
+```
+
+### Lease Progress
+
+```
+percentComplete = (daysElapsed / totalLeaseDays) × 100
+```
+
+## Tech Stack
+
+- React with TypeScript
+- Material-UI (MUI)
+- date-fns
+- Local Storage for persistence
+# lease-status
