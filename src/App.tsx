@@ -46,6 +46,12 @@ const LEASE_END_DATE = process.env.REACT_APP_LEASE_END_DATE || '2027-01-15';
 const LEASE_TOTAL_MILES = parseInt(process.env.REACT_APP_LEASE_TOTAL_MILES || '36000', 10);
 const LEASE_START_MILEAGE = parseInt(process.env.REACT_APP_LEASE_START_MILEAGE || '0', 10);
 
+console.log('Lease Configuration:');
+console.log('Start Date:', LEASE_START_DATE);
+console.log('End Date:', LEASE_END_DATE);
+console.log('Total Miles Allowed:', LEASE_TOTAL_MILES);
+console.log('Starting Odometer:', LEASE_START_MILEAGE);
+
 function App() {
   const theme = useTheme();
   const [entries, setEntries] = useState<MileageEntry[]>(() => {
